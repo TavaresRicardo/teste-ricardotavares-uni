@@ -33,6 +33,20 @@ Route::get('/testetelefonecliente', function (Request $request) {
     return Telefone::find(1)->cliente;
 });
 
+Route::get('/clientes', 'ClienteController@index' );
+Route::get('/clientes/telefone/{id}', 'ClienteController@telefones' );
 Route::post('/clientes', 'ClienteController@store' );
+Route::get('/clientes/create', 'ClienteController@create' );
 Route::get('/clientes/{id}', 'ClienteController@show');
+Route::put('/clientes/{id}', 'ClienteController@update');
 Route::delete('/clientes/{id}', 'ClienteController@destroy');
+Route::get('/clientes/{id}/edit', 'ClienteController@edit');
+
+
+Route::get('/telefones', 'TelefoneController@index' );
+Route::post('/telefones', 'TelefoneController@store' );
+Route::get('/telefones/create', 'TelefoneController@create' );
+Route::get('/telefones/{id}', 'TelefoneController@show');
+Route::put('/telefones/{id}', 'TelefoneController@update');
+Route::delete('/telefones/{id}', 'TelefoneController@destroy');
+Route::get('/telefones/{id}/edit', 'TelefoneController@edit');

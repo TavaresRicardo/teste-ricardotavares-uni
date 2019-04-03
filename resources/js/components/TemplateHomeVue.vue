@@ -1,21 +1,18 @@
 <template>
   <span>
     <header>
-      <nav-bar-vue logo="Cadastro de Cliente" url="#" cor="#263238 blue-grey darken-4" />
+      <nav-bar-vue logo="CRUD Cliente" url="#" cor="#263238 blue-grey darken-4" />
     </header>
 
     <main>
       <div class="container">
         <div class="row">
-          <grid-vue tamanho="2">
-
-          </grid-vue>
-          <grid-vue tamanho="11">
+          <grid-vue tamanho="12">
             <slot />
-            <route-view></route-view>
             <div class="">
                 <h2>Cadastro de Clientes</h2>
-
+                <form-vue></form-vue>
+                <route-view></route-view>
                 <div class="row">
                     <div class="col s12 m10">
                         <div class="card blue-grey darken-1">
@@ -59,6 +56,9 @@ import NavBarVue from './NavBarVue';
 import FooterVue from './FooterVue';
 import GridVue from './GridVue';
 import CardMenuVue from './CardMenuVue';
+// import VueRouter from 'vue-router';
+import FormVue from './FormularioVue';
+import Route from '../routes';
 
 export default {
   name: 'TemplateHomeVue',
@@ -66,11 +66,16 @@ export default {
     NavBarVue,
     FooterVue,
     GridVue,
-    CardMenuVue
+    CardMenuVue,
+    // VueRouter,
+    FormVue,
+    Route,
+  },
+  data(){
+    return{
+
+    }
   }
 }
+
 </script>
-
-<style>
-
-</style>

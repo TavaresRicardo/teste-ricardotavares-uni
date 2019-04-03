@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('app');
 });
+Route::get('/listar', function () {
+    return view('listar');
+});

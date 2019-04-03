@@ -16,6 +16,17 @@ class ClienteController extends Controller
      */
     public function index()
     {
+        $clientes = Cliente::all();
+
+        return $clientes;
+        //
+    }
+
+    public function telefones($id)
+    {
+        $telefone = Telefone::where('cliente_id', $id )->first();
+
+        return $telefone->numero;
         //
     }
 
@@ -26,10 +37,10 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        if( view()->exists('cadastrarcliente')){
-            return view("cadastrarcliente");
+        if( view()->exists('api.clientes.create')){
+            return view("api.clientes.create");
         }else{
-            return view('welcome');
+            return view('app');
         }
         //
     }
@@ -42,6 +53,19 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
+
+        $regras = [
+            'nome' => 'required|min:3|max:45',
+            'data_nascimento' => 'required',
+        ];
+        $mensagens = [
+            'required' => 'O :attribute é obrigatório.',
+            'nome.min' => 'É necessário no mínimo 3 caracteres no nome.',
+            'nome.max' => 'É aceitavel no máximo 45 caracteres no nome.',
+            'data_nascimento.before' => 'Idade do cliente inferior a 1 dia, impossível fazer o cadastro.',
+        ];
+        $request->validate($regras, $mensagens);
+
         // Criando um novo objeto do tipo Cliente
         $cliente = new Cliente();
 
@@ -55,9 +79,19 @@ class ClienteController extends Controller
             $cliente->updated_at = $request->data_atualizacao;
         }
         $cliente->save();
-        return $cliente->id;
-        
-        
+
+
+        /*telefone = new Telefone();
+        $telefone->numero = $request->numero;
+        $telefone->principal = $request->principal;
+        $telefone->cliente_id = $cliente->id;
+        $telefone->save();*/
+
+        return ['status'=>true,"conteudos"=>$cliente];
+
+        // return $cliente->id;
+
+
     }
 
     /**
@@ -69,19 +103,8 @@ class ClienteController extends Controller
     public function show($id)
     {
         $cliente = Cliente::find($id);
-        
+
         return $cliente;
-    }
-    
-    
-    public function listar()
-    {
-        $clientes = Cliente::all();
-        if( view()->exists('listarclientes')){
-            return view('listarclientes');
-        }else{
-            return redirect('/');
-        }
     }
 
     /**
@@ -92,10 +115,8 @@ class ClienteController extends Controller
      */
     public function edit($id)
     {
-        
-        $client = Cliente::find($id);
-        $telefones = Telefone::all();
-        return view ('editarcliente', compact('client', 'telefones'));
+        $cliente = Clientes::find($id);
+        return view ('api.cliente.edit', compact('cliente'));
         //
     }
 
@@ -108,8 +129,8 @@ class ClienteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $regras = [ 
-            'nome' => 'required|min:3|max:45', 
+        $regras = [
+            'nome' => 'required|min:3|max:45',
             'data_nascimento' => 'required',
         ];
         $mensagens = [
@@ -129,10 +150,9 @@ class ClienteController extends Controller
         $cliente->data_nascimento = $request->data_nascimento;
 
         $cliente->save();
-        
-        $clientes = Cliente::all();
-        $telefones = Telefone::all();
-        return view("listarclientes", compact('clientes', 'telefones'));
+
+        return ['status'=>true,"conteudos"=>$cliente];
+
 
     }
 

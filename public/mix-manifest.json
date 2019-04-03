@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/listar.js": "/js/listar.js",
     "/css/app.css": "/css/app.css",
-    "/static/js/materialize.min.js": "/static/js/materialize.min.js",
-    "/css/materialize.min.css": "/css/materialize.min.css"
+    "/css/materialize.css": "/css/materialize.css"
 }

@@ -3,6 +3,7 @@ import './bootstrap';
 import Vue from 'vue';
 // import App from './components/TemplateHomeVue';
 import App from './components/FormularioVue';
+import List from './components/ListaUsuario';
 import Router from './routes';
 
 // import NavBarVue from './components/NavBarVue';
@@ -13,7 +14,7 @@ import Router from './routes';
 
 const app = new Vue({
     el: '#app',
-    render: h => h(App),
+    render: h => h(List),
     router: Router,
 });
 

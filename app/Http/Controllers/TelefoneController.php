@@ -15,7 +15,8 @@ class TelefoneController extends Controller
      */
     public function index()
     {
-        //
+        $telefones = Telefone::all();
+        return $telefones;
     }
 
     /**
@@ -25,31 +26,18 @@ class TelefoneController extends Controller
      */
     public function create()
     {
-        $clientes = Cliente::all();
-        return view("cadastrartelefone", compact('clientes'));
-    }
-    
-    public function createid(Request $request, $id)
-    {
-        $r = new Request();
-        
-        //
-    }
-    
-    public function incluir($id)
-    {
-        $client = Cliente::find($id);
-        $telefones = Telefone::all();
-        return view ('adctelcliente', compact('client', 'telefones'));
-        
-        //
+        if( view()->exists('api.telefones.create')){
+            return view("api.telefones.create");
+        }else{
+            return view('app');
+        }
     }
 
-    public function storenew(Request $request)
+    public function store(Request $request)
     {
-        $regras = [ 
+        $regras = [
             'numero' => 'required|min:14|max:15',
-            'idcliente' => 'required'
+            'cliente_id' => 'required'
         ];
         $mensagens = [
             'required' => 'O :attribute é obrigatório.',
@@ -57,63 +45,17 @@ class TelefoneController extends Controller
             'numero.max' => 'É aceitavel no máximo 15 caracteres para o telefone. Ex.: (11) 98901-1234.'
         ];
         $request->validate($regras, $mensagens);
-        
+
         $tel = new Telefone();
-        $tel->numero = $request->numero; 
-        $tel->principal = $request->radios; 
-        $tel->cliente_id = $request->idcliente;
+        $tel->numero = $request->numero;
+        $tel->principal = $request->principal;
+        $tel->cliente_id = $request->cliente_id;
         $tel->save();
-        
-        $clientes = Cliente::all();
-        $telefones = Telefone::all();
-        return view("listartelefones", compact('clientes', 'telefones'));
-       
+
+        return ['status'=>true,"conteudos"=>$tel];
+
     }
-    
-    public function store(Request $request, $idc)
-    {
-        $regras = [ 
-            'numero' => 'required|min:14|max:15'
-        ];
-        $mensagens = [
-            'required' => 'O :attribute é obrigatório.',
-            'numero.min' => 'É necessário no mínimo 14 caracteres para o telefone. Ex.: (11)  8901-1234.',
-            'numero.max' => 'É aceitavel no máximo 15 caracteres para o telefone. Ex.: (11) 98901-1234.',
-        ];
-        $request->validate($regras, $mensagens);
-        $tel = new Telefone();
-        $tel->numero = $request->numero; 
-        $tel->principal = $request->radios; 
-        $tel->cliente_id = $idc;
-        $tel->save();
-        
-        $clientes = Cliente::all();
-        $telefones = Telefone::all();
-        return view("listarclientes", compact('clientes', 'telefones'));
-       
-    }
-    
-    public function storeid(Request $request, $idc) 
-    {
-        $regras = [ 
-            'numero' => 'required|min:14|max:15'
-        ];
-        $mensagens = [
-            'required' => 'O :attribute é obrigatório.',
-            'numero.min' => 'É necessário no mínimo 14 caracteres para o telefone. Ex.: (11)  8901-1234.',
-            'numero.max' => 'É aceitavel no máximo 15 caracteres para o telefone. Ex.: (11) 98901-1234.',
-        ];
-        $request->validate($regras, $mensagens);
-        $tel = new Telefone();
-        $tel->numero = $request->numero; 
-        $tel->principal = $request->radios; 
-        $tel->cliente_id = $idc;
-        $tel->save();
-        $telefones = Telefone::all();
-        $client = Cliente::find($idc);
-        return view ('adctelclient', compact('client', 'telefones'));
-    }
-    
+
 
     /**
      * Display the specified resource.
@@ -121,13 +63,12 @@ class TelefoneController extends Controller
      * @param  \App\Telefone  $telefone
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        
-        $clientes = Cliente::all();
-        $telefones = Telefone::all();
-        return view("listartelefones", compact('clientes', 'telefones'));
-        
+
+        $telefone = Telefone::find($id);
+        return $telefone;
+
     }
 
     /**
@@ -139,7 +80,7 @@ class TelefoneController extends Controller
     public function edit($id)
     {
         $telefone = Telefone::find($id);
-        return view ('editartelefone', compact('telefone'));
+        return view ('api.telefone.edit', compact('telefone'));
     }
 
     /**
@@ -150,28 +91,25 @@ class TelefoneController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { 
-        $regras = [ 
+    {
+        $regras = [
             'numero' => 'required|min:14|max:15'
         ];
         $mensagens = [
             'required' => 'O :attribute é obrigatório.',
             'numero.min' => 'É necessário no mínimo 14 caracteres para o telefone. Ex.: (11)  8901-1234.',
             'numero.max' => 'É aceitavel no máximo 15 caracteres para o telefone. Ex.: (11) 98901-1234.',
-        ];        
+        ];
         $request->validate($regras, $mensagens);
-        
-        
+
+
         // Buscando o cliente para atualizar pelo ID
         $tel = Telefone::find($id);
 
-        $tel->numero = $request->numero; 
-        $tel->principal = $request->radios; 
+        $tel->numero = $request->numero;
+        $tel->principal = $request->principal;
         $tel->save();
-        
-        $clientes = Cliente::all();
-        $telefones = Telefone::all();
-        return redirect('/telefones/listar');
+        return ['status'=>true,"conteudos"=>$tel];
     }
 
     /**

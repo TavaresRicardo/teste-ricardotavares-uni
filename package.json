@@ -27,7 +27,6 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "hammerjs": "^2.0.8",
         "vue-router": "^3.0.2"
     }
 }

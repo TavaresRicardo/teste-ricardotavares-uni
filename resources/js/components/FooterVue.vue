@@ -3,8 +3,8 @@
         <div class="container">
             <div class="row">
             <div class="container center-align col 4 s4">
-                <!-- <img class="responsive-img" src="https://cdn.univicosa.com.br/img/logos/novo/univicosa_horizontal.png" alt="" > -->
-                <img class="responsive-img" src="" alt="" >
+                <img class="responsive-img" src="https://cdn.univicosa.com.br/img/logos/novo/univicosa_horizontal.png" alt="" >
+                <!-- <img class="responsive-img" src="" alt="" > -->
 
 
             </div>

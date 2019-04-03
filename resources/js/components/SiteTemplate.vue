@@ -1,7 +1,7 @@
 <template>
   <span>
     <header>
-      <nav-bar logo="Cadastro de Cliente" url="#" cor="#263238 blue-grey darken-4" />
+      <nav-bar logo="CRUD Cliente" url="#" cor="#263238 blue-grey darken-4" />
     </header>
 
     <main>

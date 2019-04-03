@@ -27,7 +27,7 @@
 
         </div>
 
-        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/listar.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="/static/js/materialize.js"></script>
     </body>
