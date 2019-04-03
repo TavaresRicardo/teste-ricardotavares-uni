@@ -28,9 +28,9 @@
                         </thead>
 
                         <tbody>
-                        <tr v-for="user in usuarios">
+                        <tr v-for="(user, index) in usuarios" :key="index">
                             <td>{{user.nome}}</td>
-                            <td>{{user.telefone}}</td>
+                            <td>{{user.tel_principal}}</td>
                             <td>{{user.created_at}}</td>
                         </tr>
 
@@ -48,8 +48,8 @@
 
     <footer-vue cor="#455a64 blue-grey darken-2" logo="CRUD Cliente" descricao="contato: (32) 99114-6130" ano="2019">
 
-      <li><a class="grey-text text-lighten-3" href="#!">Clientes</a></li>
-      <li><a class="grey-text text-lighten-3" href="#!">Telefones</a></li>
+      <li><a class="grey-text text-lighten-3" href="/">Página Inicial</a></li>
+      <li><a class="grey-text text-lighten-3" href="/cadastrar">Cadastrar Cliente</a></li>
 
     </footer-vue>
 
@@ -68,34 +68,33 @@ import CardMenuVue from './CardMenuVue';
 
 export default {
     name: 'ListaUsuario',
-  components:{
+    components:{
     NavBarVue,
     FooterVue,
     GridVue,
     CardMenuVue,
     // VueRouter,
-
-  },
+    },
     props:['cor','logo','descricao','ano'],
 
     data () {
         return {
-            usuarios:[{
-                nome:"",
-                telefone:123,
-                created_at:""
-            }
-            ],
+            usuarios: null,
         }
     },
-    mounted(){
-        var url="http://localhost:8000/api/clientes"
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", url, false ); // false for synchronous request
-        xmlHttp.send( null );
-        var l = JSON.parse(xmlHttp.responseText);
-        this.usuarios = JSON.parse(xmlHttp.responseText);
+    methods: {
+        start(){
+            var url="http://localhost:8000/api/clientes"
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", url, false ); // false for synchronous request
+            xmlHttp.send( null );
+            var l = JSON.parse(xmlHttp.responseText);
+            this.usuarios = JSON.parse(xmlHttp.responseText);
+        }
     },
+    created() {
+        this.start();
+    }
 }
 </script>
 

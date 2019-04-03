@@ -12,8 +12,13 @@
         <div class="row">
           <grid-vue tamanho="12">
             <slot />
-
-            <div class="jumbotron jumbotron-fluid">
+            <div class="alert alert-danger" v-if="error" style="margin-top: 15px;">
+                <strong>Erro!</strong> {{error}}
+            </div>
+            <div class="alert alert-success" v-if="sucesso" style="margin-top: 15px;">
+                <strong>Sucesso!</strong> Os dados foram enviados corretamente.
+            </div>
+            <div class="jumbotron jumbotron-fluid" style="margin-top: 15px;">
 
 
                 <div class="container">
@@ -74,8 +79,8 @@
 
     <footer-vue cor="#455a64 blue-grey darken-2" logo="CRUD Cliente" descricao="contato: (32) 99114-6130" ano="2019">
 
-      <li><a class="grey-text text-lighten-3" href="#!">Clientes</a></li>
-      <li><a class="grey-text text-lighten-3" href="#!">Telefones</a></li>
+      <li><a class="grey-text text-lighten-3" href="/">Página Inicial</a></li>
+      <li><a class="grey-text text-lighten-3" href="/listar">Listar Clientes</a></li>
 
     </footer-vue>
 
@@ -113,7 +118,9 @@ export default {
             data_nascimento: null,
             fone: {numero: '', principal: true},
             fones:[
-            ]
+            ],
+            error:"",
+            sucesso:false,
         }
     },
 
@@ -130,6 +137,7 @@ export default {
             this.fone.principal = false;
         },
         salvarTelefone(idClient, value){
+            // console.log(value)
             var data_mod = {'cliente_id': idClient, 'numero': value.numero, 'principal': value.principal}
             var data = JSON.stringify(data_mod);
             var xhr = new XMLHttpRequest();
@@ -139,10 +147,13 @@ export default {
             xhr.send(data);
         },
         salvar(){
+            if(this.nome === null || this.data_nascimento === null || this.fones[0] === undefined){
+                this.error="Corrija os erros antes de enviar."
+            }else{
+                this.error ="";
+            }
+
             var self = this;
-            console.log(this.nome);
-
-
             var usuario ={
                 nome: this.nome,
                 data_nascimento: this.data_nascimento
@@ -156,13 +167,23 @@ export default {
                 if (xhr.readyState === 4){
                     var res = JSON.parse(xhr.response);
                     var idClient = res.conteudos.id;
-                    self.fones.forEach(function(val, indice){
+                    self.fones.forEach(function(val){
+                        console.log(val);
                         self.salvarTelefone(idClient, val)
                     });
                     console.log(idClient);
                 }
             };
+
+            this.nome= "",
+            this.data_nascimento = null,
+            // this.fones=[];
+            // this.fone.numero = "";
+            // this.fone.principal = true;
+            this.sucesso=true;
             xhr.send(data);
+
+            // redirect.view('/');
 
         },
         duplicarCampos(){

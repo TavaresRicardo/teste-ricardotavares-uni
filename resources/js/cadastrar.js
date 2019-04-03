@@ -1,7 +1,8 @@
 
 import './bootstrap';
 import Vue from 'vue';
-import App from './components/TemplateHomeVue';
+// import App from './components/TemplateHomeVue';
+import App from './components/FormularioVue';
 import Router from './routes';
 
 // import NavBarVue from './components/NavBarVue';

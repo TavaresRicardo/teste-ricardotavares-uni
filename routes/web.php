@@ -17,3 +17,6 @@ Route::get('/', function () {
 Route::get('/listar', function () {
     return view('listar');
 });
+Route::get('/cadastrar', function () {
+    return view('cadastrar');
+});

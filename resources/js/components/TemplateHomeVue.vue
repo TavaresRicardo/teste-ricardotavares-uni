@@ -11,7 +11,6 @@
             <slot />
             <div class="">
                 <h2>Cadastro de Clientes</h2>
-                <form-vue></form-vue>
                 <route-view></route-view>
                 <div class="row">
                     <div class="col s12 m10">
@@ -24,8 +23,8 @@
                             e mãos a obra.</p>
                         </div>
                         <div class="card-action">
-                            <route-link to="/">Cadastrar cliente</route-link>
-                            <route-link to="/clientes">Listar cliente</route-link>
+                            <a href="/cadastrar">Cadastrar cliente</a>
+                            <a href="/listar">Listar cliente</a>
 
                         </div>
                     </div>
@@ -42,8 +41,8 @@
 
     <footer-vue cor="#455a64 blue-grey darken-2" logo="CRUD Cliente" descricao="contato: (32) 99114-6130" ano="2019">
 
-      <li><a class="grey-text text-lighten-3" href="#!">Clientes</a></li>
-      <li><a class="grey-text text-lighten-3" href="#!">Telefones</a></li>
+      <li><a class="grey-text text-lighten-3" href="/listar">Listar Clientes</a></li>
+      <li><a class="grey-text text-lighten-3" href="/cadastrar">Cadastrar Cliente</a></li>
 
     </footer-vue>
 

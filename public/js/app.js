@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1936,6 +1936,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -1964,7 +1969,9 @@ __webpack_require__.r(__webpack_exports__);
         numero: '',
         principal: true
       },
-      fones: []
+      fones: [],
+      error: "",
+      sucesso: false
     };
   },
   methods: {
@@ -1983,6 +1990,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fone.principal = false;
     },
     salvarTelefone: function salvarTelefone(idClient, value) {
+      // console.log(value)
       var data_mod = {
         'cliente_id': idClient,
         'numero': value.numero,
@@ -1996,8 +2004,13 @@ __webpack_require__.r(__webpack_exports__);
       xhr.send(data);
     },
     salvar: function salvar() {
+      if (this.nome === null || this.data_nascimento === null || this.fones[0] === undefined) {
+        this.error = "Corrija os erros antes de enviar.";
+      } else {
+        this.error = "";
+      }
+
       var self = this;
-      console.log(this.nome);
       var usuario = {
         nome: this.nome,
         data_nascimento: this.data_nascimento
@@ -2012,14 +2025,19 @@ __webpack_require__.r(__webpack_exports__);
         if (xhr.readyState === 4) {
           var res = JSON.parse(xhr.response);
           var idClient = res.conteudos.id;
-          self.fones.forEach(function (val, indice) {
+          self.fones.forEach(function (val) {
+            console.log(val);
             self.salvarTelefone(idClient, val);
           });
           console.log(idClient);
         }
       };
 
-      xhr.send(data);
+      this.nome = "", this.data_nascimento = null, // this.fones=[];
+      // this.fone.numero = "";
+      // this.fone.principal = true;
+      this.sucesso = true;
+      xhr.send(data); // redirect.view('/');
     },
     duplicarCampos: function duplicarCampos() {
       var clone = document.getElementById('origem').cloneNode(true);
@@ -2112,7 +2130,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CardMenuVue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CardMenuVue */ "./resources/js/components/CardMenuVue.vue");
 /* harmony import */ var _FormularioVue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FormularioVue */ "./resources/js/components/FormularioVue.vue");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../routes */ "./resources/js/routes.js");
-//
 //
 //
 //
@@ -37368,44 +37385,51 @@ var render = function() {
                 [
                   _vm._t("default"),
                   _vm._v(" "),
-                  _c("div", { staticClass: "jumbotron jumbotron-fluid" }, [
-                    _c("div", { staticClass: "container" }, [
-                      _c("h1", { staticClass: "display-4" }, [
-                        _vm._v("Cadastro de Cliente")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", [
-                        _c("label", { attrs: { for: "nome" } }, [
-                          _vm._v("Nome")
+                  _vm.error
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "alert alert-danger",
+                          staticStyle: { "margin-top": "15px" }
+                        },
+                        [
+                          _c("strong", [_vm._v("Erro!")]),
+                          _vm._v(" " + _vm._s(_vm.error) + "\n            ")
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.sucesso
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "alert alert-success",
+                          staticStyle: { "margin-top": "15px" }
+                        },
+                        [
+                          _c("strong", [_vm._v("Sucesso!")]),
+                          _vm._v(
+                            " Os dados foram enviados corretamente.\n            "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "jumbotron jumbotron-fluid",
+                      staticStyle: { "margin-top": "15px" }
+                    },
+                    [
+                      _c("div", { staticClass: "container" }, [
+                        _c("h1", { staticClass: "display-4" }, [
+                          _vm._v("Cadastro de Cliente")
                         ]),
                         _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nome,
-                              expression: "nome"
-                            }
-                          ],
-                          staticClass: "validate",
-                          attrs: { id: "nome", type: "text" },
-                          domProps: { value: _vm.nome },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.nome = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col-md-6" }, [
+                        _c("div", [
                           _c("label", { attrs: { for: "nome" } }, [
-                            _vm._v("Telefone")
+                            _vm._v("Nome")
                           ]),
                           _vm._v(" "),
                           _c("input", {
@@ -37413,28 +37437,129 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.fone.numero,
-                                expression: "fone.numero"
+                                value: _vm.nome,
+                                expression: "nome"
                               }
                             ],
                             staticClass: "validate",
-                            attrs: {
-                              type: "text",
-                              id: "fone",
-                              maxlength: "15",
-                              size: "15"
-                            },
-                            domProps: { value: _vm.fone.numero },
+                            attrs: { id: "nome", type: "text" },
+                            domProps: { value: _vm.nome },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.$set(
-                                  _vm.fone,
-                                  "numero",
-                                  $event.target.value
-                                )
+                                _vm.nome = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-md-6" }, [
+                            _c("label", { attrs: { for: "nome" } }, [
+                              _vm._v("Telefone")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.fone.numero,
+                                  expression: "fone.numero"
+                                }
+                              ],
+                              staticClass: "validate",
+                              attrs: {
+                                type: "text",
+                                id: "fone",
+                                maxlength: "15",
+                                size: "15"
+                              },
+                              domProps: { value: _vm.fone.numero },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.fone,
+                                    "numero",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary bnt-sm col-sd-4",
+                              staticStyle: { "margin-top": "30px" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.inserirLista()
+                                }
+                              }
+                            },
+                            [_vm._v("+")]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("h5", { staticStyle: { "margin-top": "35px" } }, [
+                            _vm._v("Telefones")
+                          ]),
+                          _vm._v(" "),
+                          _c("hr"),
+                          _vm._v(" "),
+                          _c("div", [
+                            _c(
+                              "ul",
+                              _vm._l(_vm.fones, function(f) {
+                                return _c("li", [
+                                  _vm._v(
+                                    "\n                                            Numero: " +
+                                      _vm._s(f.numero) +
+                                      " Principal: " +
+                                      _vm._s(f.principal) +
+                                      "\n                                        "
+                                  )
+                                ])
+                              }),
+                              0
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "data_nascimento" } }, [
+                            _vm._v("Data de Nascimento")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.data_nascimento,
+                                expression: "data_nascimento"
+                              }
+                            ],
+                            attrs: {
+                              type: "date",
+                              id: "data_nascimento",
+                              name: "data_nascimento"
+                            },
+                            domProps: { value: _vm.data_nascimento },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.data_nascimento = $event.target.value
                               }
                             }
                           })
@@ -37443,98 +37568,27 @@ var render = function() {
                         _c(
                           "button",
                           {
-                            staticClass: "btn btn-primary bnt-sm col-sd-4",
-                            staticStyle: { "margin-top": "30px" },
+                            staticClass: "btn btn-primary bnt-sm",
                             on: {
                               click: function($event) {
-                                return _vm.inserirLista()
+                                return _vm.salvar()
                               }
                             }
                           },
-                          [_vm._v("+")]
+                          [_vm._v("Salvar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-danger bnt-sm",
+                            attrs: { href: "/" }
+                          },
+                          [_vm._v(" Cancelar ")]
                         )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", [
-                        _c("h5", { staticStyle: { "margin-top": "35px" } }, [
-                          _vm._v("Telefones")
-                        ]),
-                        _vm._v(" "),
-                        _c("hr"),
-                        _vm._v(" "),
-                        _c("div", [
-                          _c(
-                            "ul",
-                            _vm._l(_vm.fones, function(f) {
-                              return _c("li", [
-                                _vm._v(
-                                  "\n                                            Numero: " +
-                                    _vm._s(f.numero) +
-                                    " Principal: " +
-                                    _vm._s(f.principal) +
-                                    "\n                                        "
-                                )
-                              ])
-                            }),
-                            0
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("label", { attrs: { for: "data_nascimento" } }, [
-                          _vm._v("Data de Nascimento")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.data_nascimento,
-                              expression: "data_nascimento"
-                            }
-                          ],
-                          attrs: {
-                            type: "date",
-                            id: "data_nascimento",
-                            name: "data_nascimento"
-                          },
-                          domProps: { value: _vm.data_nascimento },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.data_nascimento = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary bnt-sm",
-                          on: {
-                            click: function($event) {
-                              return _vm.salvar()
-                            }
-                          }
-                        },
-                        [_vm._v("Salvar")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-danger bnt-sm",
-                          attrs: { href: "/" }
-                        },
-                        [_vm._v(" Cancelar ")]
-                      )
-                    ])
-                  ])
+                      ])
+                    ]
+                  )
                 ],
                 2
               )
@@ -37558,11 +37612,8 @@ var render = function() {
           _c("li", [
             _c(
               "a",
-              {
-                staticClass: "grey-text text-lighten-3",
-                attrs: { href: "#!" }
-              },
-              [_vm._v("Clientes")]
+              { staticClass: "grey-text text-lighten-3", attrs: { href: "/" } },
+              [_vm._v("Página Inicial")]
             )
           ]),
           _vm._v(" "),
@@ -37571,9 +37622,9 @@ var render = function() {
               "a",
               {
                 staticClass: "grey-text text-lighten-3",
-                attrs: { href: "#!" }
+                attrs: { href: "/listar" }
               },
-              [_vm._v("Telefones")]
+              [_vm._v("Listar Clientes")]
             )
           ])
         ]
@@ -37650,16 +37701,16 @@ var staticRenderFns = [
         attrs: { id: "nav-mobile" }
       },
       [
-        _c("li", [_c("a", { attrs: { href: "sass.html" } }, [_vm._v("Home")])]),
+        _c("li", [_c("a", { attrs: { href: "/" } }, [_vm._v("Home")])]),
         _vm._v(" "),
         _c("li", [
-          _c("a", { attrs: { href: "badges.html" } }, [_vm._v("Clientes")])
+          _c("a", { attrs: { href: "/cadastrar" } }, [
+            _vm._v("Cadastrar Cliente")
+          ])
         ]),
         _vm._v(" "),
         _c("li", [
-          _c("a", { attrs: { href: "collapsible.html" } }, [
-            _vm._v("Telefones")
-          ])
+          _c("a", { attrs: { href: "/listar" } }, [_vm._v("Listar Clientes")])
         ])
       ]
     )
@@ -37721,8 +37772,6 @@ var render = function() {
                     [
                       _c("h2", [_vm._v("Cadastro de Clientes")]),
                       _vm._v(" "),
-                      _c("form-vue"),
-                      _vm._v(" "),
                       _c("route-view"),
                       _vm._v(" "),
                       _c("div", { staticClass: "row" }, [
@@ -37747,22 +37796,15 @@ var render = function() {
                                 ]
                               ),
                               _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "card-action" },
-                                [
-                                  _c("route-link", { attrs: { to: "/" } }, [
-                                    _vm._v("Cadastrar cliente")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "route-link",
-                                    { attrs: { to: "/clientes" } },
-                                    [_vm._v("Listar cliente")]
-                                  )
-                                ],
-                                1
-                              )
+                              _c("div", { staticClass: "card-action" }, [
+                                _c("a", { attrs: { href: "/cadastrar" } }, [
+                                  _vm._v("Cadastrar cliente")
+                                ]),
+                                _vm._v(" "),
+                                _c("a", { attrs: { href: "/listar" } }, [
+                                  _vm._v("Listar cliente")
+                                ])
+                              ])
                             ]
                           )
                         ])
@@ -37795,9 +37837,9 @@ var render = function() {
               "a",
               {
                 staticClass: "grey-text text-lighten-3",
-                attrs: { href: "#!" }
+                attrs: { href: "/listar" }
               },
-              [_vm._v("Clientes")]
+              [_vm._v("Listar Clientes")]
             )
           ]),
           _vm._v(" "),
@@ -37806,9 +37848,9 @@ var render = function() {
               "a",
               {
                 staticClass: "grey-text text-lighten-3",
-                attrs: { href: "#!" }
+                attrs: { href: "/cadastrar" }
               },
-              [_vm._v("Telefones")]
+              [_vm._v("Cadastrar Cliente")]
             )
           ])
         ]
@@ -52604,10 +52646,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_FormularioVue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/FormularioVue */ "./resources/js/components/FormularioVue.vue");
+/* harmony import */ var _components_TemplateHomeVue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/TemplateHomeVue */ "./resources/js/components/TemplateHomeVue.vue");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 
- // import App from './components/TemplateHomeVue';
 
 
  // import NavBarVue from './components/NavBarVue';
@@ -52618,7 +52659,7 @@ __webpack_require__.r(__webpack_exports__);
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   render: function render(h) {
-    return h(_components_FormularioVue__WEBPACK_IMPORTED_MODULE_2__["default"]);
+    return h(_components_TemplateHomeVue__WEBPACK_IMPORTED_MODULE_2__["default"]);
   },
   router: _routes__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
@@ -53133,7 +53174,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /*!***********************************!*\
   !*** multi ./resources/js/app.js ***!
   \***********************************/

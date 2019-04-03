@@ -17,17 +17,34 @@ class ClienteController extends Controller
     public function index()
     {
         $clientes = Cliente::all();
-
+        foreach($clientes as $cliente){
+            foreach($cliente->telefones->all() as $telefone){
+                if($telefone['principal']) {
+                    $cliente['tel_principal'] = $telefone['numero'];
+                }
+            };
+        }
         return $clientes;
         //
     }
 
     public function telefones($id)
     {
-        $telefone = Telefone::where('cliente_id', $id )->first();
-
-        return $telefone->numero;
+        // $telefone = Telefone::where('cliente_id', $id )->first();
+        // return $telefone->numero;
+        $cliente = Cliente::find($id);
+        foreach($cliente->telefones->all() as $telefone){
+            if($telefone['principal']) {
+                return $telefone['numero'];
+            }
+        };
         //
+    }
+
+    public function telefonePrincipal($id)
+    {
+        $telefone = Telefone::where('cliente_id', $id )->where('principal', 1 );
+        return $telefone->numero;
     }
 
     /**
